@@ -42,11 +42,11 @@ static XcodeKit *sharedPlugin;
         {
             [[menuItem submenu] addItem:[NSMenuItem separatorItem]];
             
-            NSMenuItem *actionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Delete Selection / Line" action:@selector(deleteSelection) keyEquivalent:@""];
+            NSMenuItem *actionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Delete Selection / Line" action:@selector(deleteSelection) keyEquivalent:@"cmd+E"];
             [actionMenuItem setTarget:self];
             [[menuItem submenu] addItem:actionMenuItem];
             
-            NSMenuItem *actionMenuItem2 = [[NSMenuItem alloc] initWithTitle:@"Duplicate Selection / Line" action:@selector(duplicateSelection) keyEquivalent:@""];
+            NSMenuItem *actionMenuItem2 = [[NSMenuItem alloc] initWithTitle:@"Duplicate Selection / Line" action:@selector(duplicateSelection) keyEquivalent:@"cmd+d"];
             [actionMenuItem2 setTarget:self];
             [[menuItem submenu] addItem:actionMenuItem2];
             
@@ -96,12 +96,12 @@ static XcodeKit *sharedPlugin;
         
         if(selectedRanges.count >= 1)
         {
-			NSString *code = codeEditor.textStorage.string;
-			
+            NSString *code = codeEditor.textStorage.string;
+            
             self.currentRange     = [[selectedRanges objectAtIndex:0] rangeValue];
             self.currentLineRange = [code lineRangeForRange:currentRange];
             self.currentSelection = [code substringWithRange:currentRange];
-			
+            
             //NSRange rangeInLine = NSMakeRange(currentRange.location - currentLineRange.location, currentRange.length);
             //NSLog(@"%@", NSStringFromRange(currentRange));
         }
@@ -116,13 +116,12 @@ static XcodeKit *sharedPlugin;
             [codeEditor insertText:@"" replacementRange:currentRange];
 		}
         else {
-            
-            long start, end;
-            
-            start = currentLineRange.location - 1;
-            end = currentLineRange.length;
-            
-            [codeEditor insertText:@"" replacementRange:NSMakeRange(start, end)];
+            @try {
+                [codeEditor insertText:@"" replacementRange:NSMakeRange(currentLineRange.location-1, currentLineRange.length)];
+            }
+            @catch (NSException *exception) {
+                [codeEditor insertText:@"" replacementRange:NSMakeRange(currentLineRange.location, currentLineRange.length)];
+            }
         }
 	}
 }

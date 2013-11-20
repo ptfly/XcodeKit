@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		BBF3086E183CE1D4004E1A8A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBF3086D183CE1D4004E1A8A /* Cocoa.framework */; };
 		BBF30878183CE1D4004E1A8A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BBF30876183CE1D4004E1A8A /* InfoPlist.strings */; };
+		BBF30881183CE31B004E1A8A /* XcodeKit.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF30880183CE31B004E1A8A /* XcodeKit.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BBF3086A183CE1D4004E1A8A /* XcodeKit.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XcodeKit.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBF3086A183CE1D4004E1A8A /* XcodeKit.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XcodeKit.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF3086D183CE1D4004E1A8A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		BBF30870183CE1D4004E1A8A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BBF30871183CE1D4004E1A8A /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -20,6 +21,8 @@
 		BBF30875183CE1D4004E1A8A /* XcodeKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "XcodeKit-Info.plist"; sourceTree = "<group>"; };
 		BBF30877183CE1D4004E1A8A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BBF30879183CE1D4004E1A8A /* XcodeKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XcodeKit-Prefix.pch"; sourceTree = "<group>"; };
+		BBF3087F183CE31B004E1A8A /* XcodeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XcodeKit.h; sourceTree = "<group>"; };
+		BBF30880183CE31B004E1A8A /* XcodeKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XcodeKit.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +49,7 @@
 		BBF3086B183CE1D4004E1A8A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BBF3086A183CE1D4004E1A8A /* XcodeKit.bundle */,
+				BBF3086A183CE1D4004E1A8A /* XcodeKit.xcplugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -73,6 +76,8 @@
 		BBF30873183CE1D4004E1A8A /* XcodeKit */ = {
 			isa = PBXGroup;
 			children = (
+				BBF3087F183CE31B004E1A8A /* XcodeKit.h */,
+				BBF30880183CE31B004E1A8A /* XcodeKit.m */,
 				BBF30874183CE1D4004E1A8A /* Supporting Files */,
 			);
 			path = XcodeKit;
@@ -105,7 +110,7 @@
 			);
 			name = XcodeKit;
 			productName = XcodeKit;
-			productReference = BBF3086A183CE1D4004E1A8A /* XcodeKit.bundle */;
+			productReference = BBF3086A183CE1D4004E1A8A /* XcodeKit.xcplugin */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -150,6 +155,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBF30881183CE31B004E1A8A /* XcodeKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,12 +245,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DSTROOT = "${HOME}";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XcodeKit/XcodeKit-Prefix.pch";
 				INFOPLIST_FILE = "XcodeKit/XcodeKit-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				INSTALL_PATH = "/Library/Application Support/Developer/Shared/Xcode/Plug-ins";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = bundle;
+				WRAPPER_EXTENSION = xcplugin;
 			};
 			name = Debug;
 		};
@@ -252,12 +261,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DSTROOT = "${HOME}";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "XcodeKit/XcodeKit-Prefix.pch";
 				INFOPLIST_FILE = "XcodeKit/XcodeKit-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				INSTALL_PATH = "/Library/Application Support/Developer/Shared/Xcode/Plug-ins";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = bundle;
+				WRAPPER_EXTENSION = xcplugin;
 			};
 			name = Release;
 		};
@@ -280,6 +292,7 @@
 				BBF3087E183CE1D4004E1A8A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

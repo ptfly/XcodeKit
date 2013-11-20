@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "BBF30869183CE1D4004E1A8A"
-               BuildableName = "XcodeKit.bundle"
+               BuildableName = "XcodeKit.xcplugin"
                BlueprintName = "XcodeKit"
                ReferencedContainer = "container:XcodeKit.xcodeproj">
             </BuildableReference>

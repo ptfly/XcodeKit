@@ -139,10 +139,11 @@ static XcodeKit *sharedPlugin;
             [codeEditor insertText:copy];
 		}
         else {
-            NSString *lineContent = [codeEditor.textStorage.string substringWithRange:currentLineRange];
+            NSString *lineContent = [NSString stringWithFormat:@"%@", [codeEditor.textStorage.string substringWithRange:currentLineRange]];
             
             [codeEditor setSelectedRange:NSMakeRange(currentLineRange.location + currentLineRange.length, 0)];
             [codeEditor insertText:lineContent];
+            [codeEditor setSelectedRange:NSMakeRange(currentLineRange.location - 1, 0)];
         }
 	}
 }

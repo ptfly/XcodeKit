@@ -7,14 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BBAB406C183CFE2900FBBD4E /* XcodeKit.xcplugin in Resources */ = {isa = PBXBuildFile; fileRef = BBAB406B183CFE2900FBBD4E /* XcodeKit.xcplugin */; };
 		BBF3086E183CE1D4004E1A8A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBF3086D183CE1D4004E1A8A /* Cocoa.framework */; };
 		BBF30878183CE1D4004E1A8A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BBF30876183CE1D4004E1A8A /* InfoPlist.strings */; };
 		BBF30881183CE31B004E1A8A /* XcodeKit.m in Sources */ = {isa = PBXBuildFile; fileRef = BBF30880183CE31B004E1A8A /* XcodeKit.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BBAB406B183CFE2900FBBD4E /* XcodeKit.xcplugin */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = XcodeKit.xcplugin; sourceTree = "<group>"; };
 		BBF3086A183CE1D4004E1A8A /* XcodeKit.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XcodeKit.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF3086D183CE1D4004E1A8A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		BBF30870183CE1D4004E1A8A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -42,7 +40,6 @@
 		BBF30861183CE1D4004E1A8A = {
 			isa = PBXGroup;
 			children = (
-				BBAB406B183CFE2900FBBD4E /* XcodeKit.xcplugin */,
 				BBF30873183CE1D4004E1A8A /* XcodeKit */,
 				BBF3086C183CE1D4004E1A8A /* Frameworks */,
 				BBF3086B183CE1D4004E1A8A /* Products */,
@@ -147,7 +144,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBAB406C183CFE2900FBBD4E /* XcodeKit.xcplugin in Resources */,
 				BBF30878183CE1D4004E1A8A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

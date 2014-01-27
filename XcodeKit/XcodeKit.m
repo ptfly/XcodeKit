@@ -35,7 +35,7 @@ static XcodeKit *sharedPlugin;
     if(self = [super init])
     {
         self.bundle = plugin;
-     
+        
         NSMenuItem *menuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
         
         if(menuItem)
@@ -112,15 +112,21 @@ static XcodeKit *sharedPlugin;
 {
     if(codeEditor)
 	{
-		if(currentSelection && [currentSelection isNotEqualTo:@""]){
+		if(currentSelection && [currentSelection isNotEqualTo:@""]) { // just deleting the selection
             [codeEditor insertText:@"" replacementRange:currentRange];
 		}
-        else {
+        else { // deleting an entire line
+            NSRange targetRange = currentLineRange;
+            
+            // position the cursor at the start of the next line, so we can repeatedly delete lines down the file
+            NSRange range = NSMakeRange(currentLineRange.location + currentLineRange.length, 0);
+            [codeEditor setSelectedRange:range];
+            
             @try {
-                [codeEditor insertText:@"" replacementRange:NSMakeRange(currentLineRange.location-1, currentLineRange.length)];
+                [codeEditor insertText:@"" replacementRange:NSMakeRange(targetRange.location-1, targetRange.length)];
             }
             @catch (NSException *exception) {
-                [codeEditor insertText:@"" replacementRange:NSMakeRange(currentLineRange.location, currentLineRange.length)];
+                [codeEditor insertText:@"" replacementRange:NSMakeRange(targetRange.location, targetRange.length)];
             }
         }
 	}

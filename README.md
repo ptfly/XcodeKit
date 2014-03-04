@@ -9,3 +9,5 @@ Duplicate / Remove current line or selection in Xcode 5
 - Restart Xcode and you should see to new menu items in Edit menu:
 
 **Delete Selection / Line** and **Duplicate Selection / Line**
+
+You can add shortcuts to these commands from System Preferences -> Keyboard -> Shortcuts -> App Shortcuts...

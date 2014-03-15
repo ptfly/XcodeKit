@@ -116,11 +116,16 @@ static XcodeKit *sharedPlugin;
             [codeEditor insertText:@"" replacementRange:currentRange];
 		}
         else {
+            NSRange targetRange = currentLineRange;
+            
+            //NSRange range = NSMakeRange(currentLineRange.location + currentLineRange.length, 0);
+            //[codeEditor setSelectedRange:range];
+            
             @try {
-                [codeEditor insertText:@"" replacementRange:NSMakeRange(currentLineRange.location-1, currentLineRange.length)];
+                [codeEditor insertText:@"" replacementRange:NSMakeRange(targetRange.location-1, targetRange.length)];
             }
             @catch (NSException *exception) {
-                [codeEditor insertText:@"" replacementRange:NSMakeRange(currentLineRange.location, currentLineRange.length)];
+                [codeEditor insertText:@"" replacementRange:NSMakeRange(targetRange.location, targetRange.length)];
             }
         }
 	}

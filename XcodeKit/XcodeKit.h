@@ -15,7 +15,6 @@
     NSString *currentSelection;
     
     NSTextView *codeEditor;
-    
 }
 
 @property (assign) NSRange currentRange;

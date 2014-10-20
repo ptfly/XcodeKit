@@ -90,7 +90,13 @@ static XcodeKit *sharedPlugin;
 {
     if([[notification object] isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [[notification object] isKindOfClass:[NSTextView class]])
     {
-		self.codeEditor = (NSTextView *)[notification object];
+        NSTextView * notifiedView = (NSTextView *)[notification object];
+        
+        // ignore updates for the non-focused assistant editors
+        if ( notifiedView != [[notifiedView window] firstResponder])
+            return;
+        
+        self.codeEditor = notifiedView;
         
         NSArray *selectedRanges = [codeEditor selectedRanges];
         

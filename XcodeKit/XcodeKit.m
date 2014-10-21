@@ -124,8 +124,8 @@ static XcodeKit *sharedPlugin;
         else {
             NSRange targetRange = currentLineRange;
             
-            //NSRange range = NSMakeRange(currentLineRange.location + currentLineRange.length, 0);
-            //[codeEditor setSelectedRange:range];
+            NSRange range = NSMakeRange(currentLineRange.location + currentLineRange.length, 0);
+            [codeEditor setSelectedRange:range];
             
             @try {
                 [codeEditor insertText:@"" replacementRange:NSMakeRange(targetRange.location-1, targetRange.length)];

@@ -49,24 +49,8 @@ static XcodeKit *sharedPlugin;
             NSMenuItem *actionMenuItem2 = [[NSMenuItem alloc] initWithTitle:@"Duplicate Selection / Line" action:@selector(duplicateSelection) keyEquivalent:@"cmd+d"];
             [actionMenuItem2 setTarget:self];
             [[menuItem submenu] addItem:actionMenuItem2];
-            
-            // tap into notifications
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectionDidChange:) name:NSTextViewDidChangeSelectionNotification object:nil];
-            
-            if(!self.codeEditor){
-                NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
-                if([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]){
-                    self.codeEditor = (NSTextView *)firstResponder;
-                }
-            }
-            
-            if(self.codeEditor){
-                NSNotification *notification = [NSNotification notificationWithName:NSTextViewDidChangeSelectionNotification object:self.codeEditor];
-                [self selectionDidChange:notification];
-            }
         }
     }
-    
     return self;
 }
 
@@ -86,17 +70,15 @@ static XcodeKit *sharedPlugin;
     return YES;
 }
 
--(void)selectionDidChange:(NSNotification *)notification
+- ( void ) updateIvars
 {
-    if([[notification object] isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [[notification object] isKindOfClass:[NSTextView class]])
+    self.codeEditor = nil;
+    
+    NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
+    if([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] &&
+       [firstResponder isKindOfClass:[NSTextView class]])
     {
-        NSTextView * notifiedView = (NSTextView *)[notification object];
-        
-        // ignore updates for the non-focused assistant editors
-        if ( notifiedView != [[notifiedView window] firstResponder])
-            return;
-        
-        self.codeEditor = notifiedView;
+        self.codeEditor = (NSTextView *)firstResponder;
         
         NSArray *selectedRanges = [codeEditor selectedRanges];
         
@@ -116,6 +98,8 @@ static XcodeKit *sharedPlugin;
 
 -(void)deleteSelection
 {
+    [self updateIvars];
+    
     if(codeEditor)
 	{
 		if(currentSelection && [currentSelection isNotEqualTo:@""]){
@@ -139,6 +123,8 @@ static XcodeKit *sharedPlugin;
 
 -(void)duplicateSelection
 {
+    [self updateIvars];
+
     if(codeEditor)
 	{
 		if(currentSelection && [currentSelection isNotEqualTo:@""])
@@ -160,7 +146,6 @@ static XcodeKit *sharedPlugin;
 
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSTextViewDidChangeSelectionNotification object:nil];
 }
 
 @end

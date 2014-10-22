@@ -109,6 +109,8 @@ static XcodeKit *sharedPlugin;
             NSRange targetRange = currentLineRange;
             
             NSRange range = NSMakeRange(currentLineRange.location + currentLineRange.length, 0);
+            range = [codeEditor.textStorage.string lineRangeForRange:range];
+            range = NSMakeRange(range.location + range.length - 1, 0);
             [codeEditor setSelectedRange:range];
             
             @try {

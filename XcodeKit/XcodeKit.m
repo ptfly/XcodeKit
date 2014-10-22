@@ -139,7 +139,7 @@ static XcodeKit *sharedPlugin;
             
             [codeEditor setSelectedRange:NSMakeRange(currentLineRange.location + currentLineRange.length, 0)];
             [codeEditor insertText:lineContent];
-            [codeEditor setSelectedRange:NSMakeRange(currentLineRange.location - 1, 0)];
+            [codeEditor setSelectedRange:NSMakeRange(currentLineRange.location + currentLineRange.length - 1, 0)];
         }
 	}
 }

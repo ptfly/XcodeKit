@@ -23,4 +23,6 @@
 @property (nonatomic, retain) NSTextView *codeEditor;
 
 -(id)initWithBundle:(NSBundle *)plugin;
+-(void)deleteSelection;
+-(void)duplicateSelection;
 @end

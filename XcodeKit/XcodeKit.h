@@ -8,6 +8,11 @@
 
 #import <AppKit/AppKit.h>
 
+
+@class XcodeKit;
+
+static XcodeKit *sharedPlugin;
+
 @interface XcodeKit : NSObject
 {
     NSRange currentRange;
@@ -22,6 +27,7 @@
 @property (nonatomic, retain) NSString *currentSelection;
 @property (nonatomic, retain) NSTextView *codeEditor;
 
++(instancetype)sharedPlugin;
 -(id)initWithBundle:(NSBundle *)plugin;
 -(void)deleteSelection;
 -(void)duplicateSelection;

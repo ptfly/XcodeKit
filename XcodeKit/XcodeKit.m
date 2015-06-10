@@ -11,21 +11,24 @@
 static XcodeKit *sharedPlugin;
 
 @interface XcodeKit()
-@property (nonatomic, strong) NSBundle *bundle;
+@property (nonatomic, strong, readwrite) NSBundle *bundle;
 @end
 
 @implementation XcodeKit
 @synthesize codeEditor, currentRange, currentLineRange, currentSelection;
 
++(instancetype)sharedPlugin
+{
+    return sharedPlugin;
+}
+
 +(void)pluginDidLoad:(NSBundle *)plugin
 {
-    static id sharedPlugin = nil;
     static dispatch_once_t onceToken;
     NSString *currentApplicationName = [[NSBundle mainBundle] infoDictionary][@"CFBundleName"];
-    
-    if([currentApplicationName isEqual:@"Xcode"]){
+    if ([currentApplicationName isEqual:@"Xcode"]) {
         dispatch_once(&onceToken, ^{
-            sharedPlugin = [[self alloc] initWithBundle:plugin];
+            sharedPlugin = [[XcodeKit alloc] initWithBundle:plugin];
         });
     }
 }
@@ -35,23 +38,50 @@ static XcodeKit *sharedPlugin;
     if(self = [super init])
     {
         self.bundle = plugin;
-     
-        NSMenuItem *menuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
         
-        if(menuItem)
-        {
-            [[menuItem submenu] addItem:[NSMenuItem separatorItem]];
-            
-            NSMenuItem *actionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Delete Selection / Line" action:@selector(deleteSelection) keyEquivalent:@"cmd+E"];
-            [actionMenuItem setTarget:self];
-            [[menuItem submenu] addItem:actionMenuItem];
-            
-            NSMenuItem *actionMenuItem2 = [[NSMenuItem alloc] initWithTitle:@"Duplicate Selection / Line" action:@selector(duplicateSelection) keyEquivalent:@"cmd+d"];
-            [actionMenuItem2 setTarget:self];
-            [[menuItem submenu] addItem:actionMenuItem2];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didApplicationFinishLaunchingNotification:)
+                                                     name:NSApplicationDidFinishLaunchingNotification
+                                                   object:nil];
+        
+    }
+    
+    return self;
+}
+
+-(void)didApplicationFinishLaunchingNotification:(NSNotification*)notification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSApplicationDidFinishLaunchingNotification object:nil];
+    
+    NSMenuItem *menuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
+    
+    if(menuItem)
+    {
+        [[menuItem submenu] addItem:[NSMenuItem separatorItem]];
+        
+        NSMenuItem *actionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Delete Selection / Line" action:@selector(deleteSelection) keyEquivalent:@"cmd+E"];
+        [actionMenuItem setTarget:self];
+        [[menuItem submenu] addItem:actionMenuItem];
+        
+        NSMenuItem *actionMenuItem2 = [[NSMenuItem alloc] initWithTitle:@"Duplicate Selection / Line" action:@selector(duplicateSelection) keyEquivalent:@"cmd+d"];
+        [actionMenuItem2 setTarget:self];
+        [[menuItem submenu] addItem:actionMenuItem2];
+        
+        // tap into notifications
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectionDidChange:) name:NSTextViewDidChangeSelectionNotification object:nil];
+        
+        if(!self.codeEditor){
+            NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
+            if([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [firstResponder isKindOfClass:[NSTextView class]]){
+                self.codeEditor = (NSTextView *)firstResponder;
+            }
+        }
+        
+        if(self.codeEditor){
+            NSNotification *notification = [NSNotification notificationWithName:NSTextViewDidChangeSelectionNotification object:self.codeEditor];
+            [self selectionDidChange:notification];
         }
     }
-    return self;
 }
 
 -(BOOL)validateMenuItem:(NSMenuItem *)menuItem
@@ -70,15 +100,11 @@ static XcodeKit *sharedPlugin;
     return YES;
 }
 
-- ( void ) updateIvars
+-(void)selectionDidChange:(NSNotification *)notification
 {
-    self.codeEditor = nil;
-    
-    NSResponder *firstResponder = [[NSApp keyWindow] firstResponder];
-    if([firstResponder isKindOfClass:NSClassFromString(@"DVTSourceTextView")] &&
-       [firstResponder isKindOfClass:[NSTextView class]])
+    if([[notification object] isKindOfClass:NSClassFromString(@"DVTSourceTextView")] && [[notification object] isKindOfClass:[NSTextView class]])
     {
-        self.codeEditor = (NSTextView *)firstResponder;
+        self.codeEditor = (NSTextView *)[notification object];
         
         NSArray *selectedRanges = [codeEditor selectedRanges];
         
@@ -98,20 +124,16 @@ static XcodeKit *sharedPlugin;
 
 -(void)deleteSelection
 {
-    [self updateIvars];
-    
     if(codeEditor)
-	{
-		if(currentSelection && [currentSelection isNotEqualTo:@""]){
+    {
+        if(currentSelection && [currentSelection isNotEqualTo:@""]){
             [codeEditor insertText:@"" replacementRange:currentRange];
-		}
+        }
         else {
             NSRange targetRange = currentLineRange;
             
-            NSRange range = NSMakeRange(currentLineRange.location + currentLineRange.length, 0);
-            range = [codeEditor.textStorage.string lineRangeForRange:range];
-            range = NSMakeRange(range.location + range.length - 1, 0);
-            [codeEditor setSelectedRange:range];
+            //NSRange range = NSMakeRange(currentLineRange.location + currentLineRange.length, 0);
+            //[codeEditor setSelectedRange:range];
             
             @try {
                 [codeEditor insertText:@"" replacementRange:NSMakeRange(targetRange.location-1, targetRange.length)];
@@ -120,34 +142,33 @@ static XcodeKit *sharedPlugin;
                 [codeEditor insertText:@"" replacementRange:NSMakeRange(targetRange.location, targetRange.length)];
             }
         }
-	}
+    }
 }
 
 -(void)duplicateSelection
 {
-    [self updateIvars];
-
     if(codeEditor)
-	{
-		if(currentSelection && [currentSelection isNotEqualTo:@""])
+    {
+        if(currentSelection && [currentSelection isNotEqualTo:@""])
         {
             NSString *copy = currentSelection;
             
             [codeEditor setSelectedRange:NSMakeRange(currentRange.location + currentRange.length, 0)];
             [codeEditor insertText:copy];
-		}
+        }
         else {
             NSString *lineContent = [codeEditor.textStorage.string substringWithRange:currentLineRange];
             
             [codeEditor setSelectedRange:NSMakeRange(currentLineRange.location + currentLineRange.length, 0)];
             [codeEditor insertText:lineContent];
-            [codeEditor setSelectedRange:NSMakeRange(currentLineRange.location + currentLineRange.length - 1, 0)];
+            [codeEditor setSelectedRange:NSMakeRange(currentLineRange.location - 1, 0)];
         }
-	}
+    }
 }
 
 -(void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

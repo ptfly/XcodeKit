@@ -137,6 +137,7 @@ static XcodeKit *sharedPlugin;
             
             @try {
                 [codeEditor insertText:@"" replacementRange:NSMakeRange(targetRange.location-1, targetRange.length)];
+                [codeEditor setSelectedRange:NSMakeRange(targetRange.location, 0)];
             }
             @catch (NSException *exception) {
                 [codeEditor insertText:@"" replacementRange:NSMakeRange(targetRange.location, targetRange.length)];

@@ -40,6 +40,8 @@
 		<string>E969541F-E6F9-4D25-8158-72DC3545A6C6</string>
 		<string>8DC44374-2B35-4C57-A6FE-2AD66A36AAD9</string>
 		<string>7FDF5C7A-131F-4ABB-9EDC-8C5F8F0B8A90</string>
+		<string>F41BD31E-2683-44B8-AE7F-5F09E919790E  7.2.1</string>
+		<string>ACA8656B-FEA8-4B6D-8E4A-93F4C95C362C</string>
 	</array>
 	<key>Description</key>
 	<string>This template builds an Xcode5-compatible plugin.</string>
